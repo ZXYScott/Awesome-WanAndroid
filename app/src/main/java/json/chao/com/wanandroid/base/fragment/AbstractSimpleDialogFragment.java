@@ -49,8 +49,8 @@ public abstract class AbstractSimpleDialogFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RefWatcher refWatcher = WanAndroidApp.getRefWatcher(getActivity());
-        refWatcher.watch(this);
+//        RefWatcher refWatcher = WanAndroidApp.getRefWatcher(getActivity());
+//        refWatcher.watch(this);
     }
 
     @Override
