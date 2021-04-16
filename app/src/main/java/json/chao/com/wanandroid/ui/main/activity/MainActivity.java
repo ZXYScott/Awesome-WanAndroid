@@ -29,6 +29,8 @@ import com.facebook.device.yearclass.YearClass;
 import org.jay.launchstarter.TaskDispatcher;
 import org.jay.launchstarter.utils.DispatcherExecutor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import json.chao.com.wanandroid.R;
+import json.chao.com.wanandroid.annotationtest.DoubleClickTest;
 import json.chao.com.wanandroid.app.Constants;
 import json.chao.com.wanandroid.app.WanAndroidApp;
 import json.chao.com.wanandroid.base.activity.BaseActivity;
@@ -56,6 +59,7 @@ import json.chao.com.wanandroid.utils.BottomNavigationViewHelper;
 import json.chao.com.wanandroid.utils.CommonAlertDialog;
 import json.chao.com.wanandroid.utils.CommonUtils;
 import json.chao.com.wanandroid.utils.LogHelper;
+import json.chao.com.wanandroid.utils.ShareUtil;
 import json.chao.com.wanandroid.utils.StatusBarUtil;
 
 
@@ -222,13 +226,22 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_usage:
-                if (usageDialogFragment == null) {
-                    usageDialogFragment = new UsageDialogFragment();
+                try {
+                    checkcheck(ShareUtil.class);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
                 }
-                if (!isDestroyed() && usageDialogFragment.isAdded()) {
-                    usageDialogFragment.dismiss();
-                }
-                usageDialogFragment.show(getSupportFragmentManager(), "UsageDialogFragment");
+//                if (usageDialogFragment == null) {
+//                    usageDialogFragment = new UsageDialogFragment();
+//                }
+//                if (!isDestroyed() && usageDialogFragment.isAdded()) {
+//                    usageDialogFragment.dismiss();
+//                }
+//                usageDialogFragment.show(getSupportFragmentManager(), "UsageDialogFragment");
                 break;
             case R.id.action_search:
                 if (searchDialogFragment == null) {
@@ -244,6 +257,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public static void checkcheck(Class clz) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        if (clz != null) {
+            Method[] methods = clz.getMethods();
+            if (methods != null) {
+                for (Method method : methods) {
+                    if (method.isAnnotationPresent(DoubleClickTest.class)) {
+                        DoubleClickTest doubleClickTest = method.getAnnotation(DoubleClickTest.class);
+                        int time = doubleClickTest.time();
+                        method.invoke(clz.newInstance(), time);
+                    }
+                }
+            }
+        }
+    }
+
+
 
     @Override
     public void onBackPressedSupport() {

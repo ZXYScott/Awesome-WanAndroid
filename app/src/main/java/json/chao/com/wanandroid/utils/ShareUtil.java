@@ -3,6 +3,12 @@ package json.chao.com.wanandroid.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import json.chao.com.wanandroid.annotationtest.DoubleClickTest;
 
 /**
  * Created by codeest on 2016/8/22.
@@ -23,4 +29,11 @@ public class ShareUtil {
                 "mailto:" + EMAIL_ADDRESS));
         context.startActivity(Intent.createChooser(intent, title));
     }
+
+
+    @DoubleClickTest(time = 2000)
+    public void checkCode(int time) {
+        Log.i("zxy--", "checkCode: time : " + time);
+    }
+
 }
